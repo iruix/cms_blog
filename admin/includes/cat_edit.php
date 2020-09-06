@@ -4,15 +4,11 @@
 <?php
 if(isset($_GET['edit'])){
     $cat_id = $_GET['edit'];
-    $query = "SELECT * FROM categories WHERE cat_id = {$cat_id}";//You can limit it by adding LIMIT 3 to the end
-    $select_categories_edit = mysqli_query($connection, $query);
-    while($row = mysqli_fetch_assoc($select_categories_edit)){
-        $cat_title = $row['cat_title'];
-        $cat_id = $row['cat_id'];
+    
 ?>
     <input value="<?php if(isset($cat_title)){ echo $cat_title; } ?>" class="form-control" type="text" name="cat_title">
 <?php }
-}
+
 ?>
 
 <?php 
