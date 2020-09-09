@@ -10,6 +10,8 @@
             <th>Image</th>
             <th>Tags</th>
             <th>Comments</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -62,6 +64,7 @@ if(isset($_GET['delete'])){
     $post_id_delete = $_GET['delete'];
     $query = "DELETE FROM posts WHERE post_id = {$post_id_delete}";
     $delete_query = mysqli_query($connection, $query);
+    header("Location: posts.php");
 
 }
 
