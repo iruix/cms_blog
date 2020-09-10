@@ -1,5 +1,20 @@
 <div class="col-md-4">
-    
+
+                <div class="well">
+                    <h4>Login</h4>
+                    <form action="includes/login.php" method="post">
+                        <div class="form-group">
+                            <input name="username" placeholder="Enter Username" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <input name="password" placeholder="Enter Password" type="password" class="form-control">
+                            <span class="input-group-btn">
+                                                <button class="btn btn-primary" name="login" type="submit">Login</button>
+                                            </span>
+                        </div>
+                    </form> <!-- search form -->
+                    <!-- /.input-group -->
+                </div>
 
                 <!-- Blog Search Well -->
                 <div class="well">

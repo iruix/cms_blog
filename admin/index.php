@@ -10,7 +10,7 @@
                     <div class="col-lg-12">
                         <h1 class="page-header">
                             Admin Page
-                            <small>Author</small>
+                            <small><?php echo $_SESSION['username'];?></small>
                         </h1>
                     </div>
                 </div>

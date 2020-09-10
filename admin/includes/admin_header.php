@@ -1,6 +1,15 @@
 <?php ob_start(); ?>
 <?php include '../includes/db.php'; ?>
 <?php include "functions.php"; ?>
+<?php session_start(); ?>
+
+<?php
+if(!isset($_SESSION['user_role'])){
+    header("Location: ../index.php");
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +21,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin - Bootstrap Admin Template</title>
+    <title>Blog Admin Page</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
