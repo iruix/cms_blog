@@ -13,7 +13,7 @@ if(isset($_GET['edit'])){
 
 <?php 
 if(isset($_POST['update_cat'])){
-    $cat_title_update = $_POST['cat_title'];
+    $cat_title_update = mysqli_real_escape_string($connection,$_POST['cat_title']);
     $query = "UPDATE categories SET cat_title = '{$cat_title_update}' WHERE cat_id = {$cat_id}";
     $update_query = mysqli_query($connection, $query);
 }

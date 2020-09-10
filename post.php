@@ -46,7 +46,6 @@ if(isset($_GET['p_id'])){
                 <img class="img-responsive" src="images/<?php echo $post_image; ?>" alt="">
                 <hr>
                 <p><?php echo $post_content; ?></p>
-                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
                 <hr>
 
@@ -66,9 +65,9 @@ if(isset($_GET['p_id'])){
 <?php
 if(isset($_POST['create_comment'])){
     $post_id = $_GET['p_id'];
-    $comment_author = $_POST['comment_author'];
-    $comment_email = $_POST['comment_email'];
-    $comment_content = $_POST['comment_content'];
+    $comment_author = mysqli_real_escape_string($connection,$_POST['comment_author']);
+    $comment_email = mysqli_real_escape_string($connection,$_POST['comment_email']);
+    $comment_content = mysqli_real_escape_string($connection,$_POST['comment_content']);
 
     $query = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_status, comment_date) ";
     $query .= "VALUES ($post_id, '{$comment_author}', '{$comment_email}', '{$comment_content}', 'unapproved', now())";

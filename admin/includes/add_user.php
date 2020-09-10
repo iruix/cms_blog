@@ -1,18 +1,19 @@
 <?php
 if(isset($_POST['create_user'])){
-    $user_firstname =$_POST['user_firstname'];
+    $user_firstname = mysqli_real_escape_string($connection,$_POST['user_firstname']);
     // $post_date = date('d-m-y');
-    $user_lastname = $_POST['user_lastname'];
-    $username = $_POST['username'];
-    $user_email = $_POST['user_email'];
-    $user_password = $_POST['user_password'];
-    $user_role = $_POST['user_role'];
+    $user_lastname = mysqli_real_escape_string($connection,$_POST['user_lastname']);
+    $username = mysqli_real_escape_string($connection,$_POST['username']);
+    $user_email = mysqli_real_escape_string($connection,$_POST['user_email']);
+    $user_password = mysqli_real_escape_string($connection,$_POST['user_password']);
+    $user_role = mysqli_real_escape_string($connection,$_POST['user_role']);
 
 
     $query = "INSERT INTO users(user_firstname, user_lastname, username, user_email, user_password, user_role) ";
     $query .= "VALUES('{$user_firstname}', '{$user_lastname}', '{$username}', '{$user_email}', '{$user_password}', '{$user_role}')";
     $add_user_query = mysqli_query($connection, $query);
     confirmQuery($add_user_query);
+    echo "User Created Successfully" . "<br>" . "<a href='users.php' class='btn btn-primary'>View Users</a>" . "<br>";
 }
 
 

@@ -1,12 +1,12 @@
 <?php
 if(isset($_POST['create_post'])){
-    $post_title = $_POST['title'];
-    $post_author =$_POST['author'];
+    $post_title = mysqli_real_escape_string($connection,$_POST['title']);
+    $post_author = mysqli_real_escape_string($connection,$_POST['author']);
     $post_date = date('d-m-y');
-    $post_category = $_POST['post_category'];
-    $post_status = $_POST['post_status'];
-    $post_tags = $_POST['post_tags'];
-    $post_content = $_POST['post_content'];
+    $post_category = mysqli_real_escape_string($connection,$_POST['post_category']);
+    $post_status = mysqli_real_escape_string($connection,$_POST['post_status']);
+    $post_tags = mysqli_real_escape_string($connection,$_POST['post_tags']);
+    $post_content = mysqli_real_escape_string($connection,$_POST['post_content']);
 
     $post_image = $_FILES['post_image']['name'];
     $post_image_tmp = $_FILES['post_image']['tmp_name'];
@@ -17,11 +17,11 @@ if(isset($_POST['create_post'])){
     $query .= "VALUES({$post_category}, '{$post_title}', '{$post_author}', now(), '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_status}')";
     $create_post_query = mysqli_query($connection, $query);
     confirmQuery($create_post_query);
+    echo "Post Created Successfully" . "<br>" . "<a href='posts.php' class='btn btn-primary'>View Posts</a>" . "<br>";
 }
 
 
 ?>
-
 
 <form action="" method="post" enctype='multipart/form-data'>
 <div class="form-group">
@@ -50,8 +50,10 @@ if(isset($_POST['create_post'])){
     <input type="text" class="form-control" name="author">
 </div>
 <div class="form-group">
-    <label for="post_status">Post Status</label>
-    <input type="text" class="form-control" name="post_status">
+    <select name="post_status" id="">
+        <option value="draft">Draft</option>
+        <option value="published">Publish</option>
+    </select>
 </div>
 <div class="form-group">
     <label for="post_image">Post Image</label>
@@ -63,7 +65,7 @@ if(isset($_POST['create_post'])){
 </div>
 <div class="form-group">
     <label for="post_content">Post Content</label>
-    <textarea class="form-control" name="post_content" id="" cols="30" rows="10">
+    <textarea class="form-control" name="post_content" id="editor" cols="30" rows="10">
     </textarea>
 </div>
 

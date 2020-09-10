@@ -17,13 +17,13 @@ while($row = mysqli_fetch_assoc($select_users_by_id)){
 
 
 if(isset($_POST['edit_user'])){
-    $user_firstname =$_POST['user_firstname'];
+    $user_firstname = mysqli_real_escape_string($connection,$_POST['user_firstname']);
     // $post_date = date('d-m-y');
-    $user_lastname = $_POST['user_lastname'];
-    $username = $_POST['username'];
-    $user_email = $_POST['user_email'];
-    $user_password = $_POST['user_password'];
-    $user_role = $_POST['user_role'];
+    $user_lastname = mysqli_real_escape_string($connection,$_POST['user_lastname']);
+    $username = mysqli_real_escape_string($connection,$_POST['username']);
+    $user_email = mysqli_real_escape_string($connection,$_POST['user_email']);
+    $user_password = mysqli_real_escape_string($connection,$_POST['user_password']);
+    $user_role = mysqli_real_escape_string($connection,$_POST['user_role']);
 
 
     $query = "UPDATE users SET username = '{$username}', user_firstname = '{$user_firstname}', user_lastname = '{$user_lastname}', ";

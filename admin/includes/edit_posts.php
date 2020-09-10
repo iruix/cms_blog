@@ -17,14 +17,14 @@ if(isset($_GET['p_id'])){
         $post_content = $row['post_content'];
     }
 if(isset($_POST['update_post'])){
-    $post_author = $_POST['post_author'];
-    $post_title = $_POST['post_title'];
-    $post_category_id = $_POST['post_category'];
-    $post_status = $_POST['post_status'];
+    $post_author = mysqli_real_escape_string($connection,$_POST['post_author']);
+    $post_title = mysqli_real_escape_string($connection,$_POST['post_title']);
+    $post_category_id = mysqli_real_escape_string($connection,$_POST['post_category']);
+    $post_status = mysqli_real_escape_string($connection,$_POST['post_status']);
     $post_image = $_FILES['post_image']['name'];
     $post_image_temp = $_FILES['post_image']['tmp_name'];
-    $post_content = $_POST['post_content'];
-    $post_tags = $_POST['post_tags'];
+    $post_content = mysqli_real_escape_string($connection,$_POST['post_content']);
+    $post_tags = mysqli_real_escape_string($connection,$_POST['post_tags']);
 
     move_uploaded_file($post_image_temp, "../images/$post_image");
 
@@ -41,7 +41,7 @@ if(isset($_POST['update_post'])){
 
     $update_post = mysqli_query($connection, $query);
     confirmQuery($update_post);
-
+    echo "Post Edited Successfully" . "<br>" . "<a href='../post.php?p_id={$post_id}' class='btn btn-primary'>View Post</a>" . "<br>";
 }
 ?>
 
@@ -72,8 +72,16 @@ if(isset($_POST['update_post'])){
         <input value="<?php echo $post_author; ?>"  type="text" class="form-control" name="post_author">
     </div>
     <div class="form-group">
-        <label for="post_status">Post Status</label>
-        <input value="<?php echo $post_status; ?>"type="text" class="form-control" name="post_status">
+        <select name="post_status" id="">
+            <option value="<?php echo $post_status; ?>"><?php echo $post_status; ?></option>
+            <?php
+                if($post_status == 'published'){
+                    echo "<option value='draft'>draft</option>";
+                } else {
+                    echo "<option value='published'>publish</option>";
+                }
+            ?>
+        </select>
     </div>
     <div class="form-group">
         <label for="image">Post Image</label><br>
