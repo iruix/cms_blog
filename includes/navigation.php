@@ -33,7 +33,20 @@
 
                     ?>
                     <li><a href="admin">Admin</a></li>
-                </ul> 
+                    <?php
+                    if (session_status() === PHP_SESSION_NONE) session_start();
+                        if(isset($_SESSION['user_role'])){
+                            $user_role_confirm = $_SESSION['user_role'];
+                            if($user_role_confirm == 'admin'){
+                                if(isset($_GET['p_id'])) {
+                                    $post_id = $_GET['p_id'];
+                                    echo "<li><a href='admin/posts.php?source=edit_posts&p_id={$post_id}'>Edit Post</a></li>";
+                                }
+                            }
+                        }
+
+                    ?>
+                </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>

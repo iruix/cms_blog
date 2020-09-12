@@ -29,10 +29,10 @@ if(isset($_GET['p_id'])){
             $post_content = $row['post_content'];
         ?>
 
-            <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1>
+<!--            <h1 class="page-header">-->
+<!--                    Page Heading-->
+<!--                    <small>Secondary Text</small>-->
+<!--                </h1>-->
 
                 <!-- First Blog Post -->
                 <h2>

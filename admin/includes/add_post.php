@@ -32,7 +32,7 @@ if(isset($_POST['create_post'])){
         <label for="post_category">Post Category</label><br>
         <select name="post_category" id="post_category">
 <?php
-    $query = "SELECT * FROM categories";//You can limit it by adding LIMIT 3 to the end
+    $query = "SELECT * FROM categories";
     $select_categories = mysqli_query($connection, $query);
     confirmQuery($select_categories);
     while($row = mysqli_fetch_assoc($select_categories)){
@@ -50,7 +50,8 @@ if(isset($_POST['create_post'])){
     <input type="text" class="form-control" name="author">
 </div>
 <div class="form-group">
-    <select name="post_status" id="">
+    <select name="post_status" id="post_status">
+        <option disabled value selected>Select Post Status</option>
         <option value="draft">Draft</option>
         <option value="published">Publish</option>
     </select>
