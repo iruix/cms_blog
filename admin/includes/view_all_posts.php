@@ -54,6 +54,7 @@ if(isset($_POST['checkBoxArray'])){
             <th>Image</th>
             <th>Tags</th>
             <th>Comments</th>
+            <th>View Post</th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
@@ -98,6 +99,7 @@ if(isset($_POST['checkBoxArray'])){
         echo "<td><img width='100' src='../images/{$post_image}' alt='image'></td>";
         echo "<td>{$post_tags}</td>";
         echo "<td>{$post_comments}</td>";
+        echo "<td><a href='../post.php?p_id={$post_id}'>View Post</a></td>";
         echo "<td><a href='posts.php?source=edit_posts&p_id={$post_id}'>Edit</a></td>";
         echo "<td><a href='posts.php?delete={$post_id}'>Delete</a></td>";
         echo "</tr>";
