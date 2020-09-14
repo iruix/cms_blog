@@ -25,9 +25,19 @@ if(isset($_POST['edit_user'])){
     $user_password = mysqli_real_escape_string($connection,$_POST['user_password']);
     $user_role = mysqli_real_escape_string($connection,$_POST['user_role']);
 
+    $query = "SELECT randSalt FROM users";
+    $select_randsalt_query = mysqli_query($connection, $query);
+    if(!$select_randsalt_query){
+        die("Query Failed!" . mysqli_error($connection));
+    }
+    $row = mysqli_fetch_array($select_randsalt_query);
+    $salt = $row['randSalt'];
+
+    $hashed_password = crypt($user_password, $salt);
+
 
     $query = "UPDATE users SET username = '{$username}', user_firstname = '{$user_firstname}', user_lastname = '{$user_lastname}', ";
-    $query .= "user_email = '{$user_email}', user_password = '{$user_password}', user_role = '{$user_role}' WHERE user_id = {$the_user_id}";
+    $query .= "user_email = '{$user_email}', user_password = '{$hashed_password}', user_role = '{$user_role}' WHERE user_id = {$the_user_id}";
     $update_user_query = mysqli_query($connection, $query);
     confirmQuery($update_user_query);
     header("Location: users.php");
