@@ -18,7 +18,9 @@
 
 if(isset($_GET['p_id'])){
     $post_id = $_GET['p_id'];
-}
+    $post_view_query = "UPDATE posts set post_views = post_views + 1 WHERE post_id = $post_id";
+    $send_query = mysqli_query($connection, $post_view_query);
+
     $query = "SELECT * FROM posts WHERE post_id = $post_id";
     $select_all_posts_query = mysqli_query($connection, $query);
         while($row = mysqli_fetch_assoc($select_all_posts_query)){
@@ -58,7 +60,11 @@ if(isset($_GET['p_id'])){
                         <a href="#">Newer &rarr;</a>
                     </li>
                 </ul>
-<?php } ?>
+<?php }
+} else {
+    header("Location:index.php");
+}
+?>
 
 <!-- Blog Comments -->
 

@@ -54,8 +54,10 @@ if(isset($_POST['checkBoxArray'])){
             <th>Image</th>
             <th>Tags</th>
             <th>Comments</th>
+            <th>Post Views</th>
             <th>View Post</th>
             <th>Edit</th>
+            <th>Clone</th>
             <th>Delete</th>
         </tr>
     </thead>
@@ -73,6 +75,7 @@ if(isset($_POST['checkBoxArray'])){
         $post_image = $row['post_image'];
         $post_tags = $row['post_tags'];
         $post_comments = $row['post_comment_count'];
+        $post_views = $row['post_views'];
         echo "<tr>";
         ?>
         <td><input class='checkBoxes' type='checkbox' name="checkBoxArray[]" value="<?php echo $post_id; ?>"></td>
@@ -99,8 +102,10 @@ if(isset($_POST['checkBoxArray'])){
         echo "<td><img width='100' src='../images/{$post_image}' alt='image'></td>";
         echo "<td>{$post_tags}</td>";
         echo "<td>{$post_comments}</td>";
+        echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to reset post views?'); \" href='posts.php?resetviews={$post_id}'>{$post_views}</a></td>";
         echo "<td><a href='../post.php?p_id={$post_id}'>View Post</a></td>";
         echo "<td><a href='posts.php?source=edit_posts&p_id={$post_id}'>Edit</a></td>";
+        echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to clone?'); \" href='posts.php?clone={$post_id}'>Clone</a></td>";
         echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to delete?'); \" href='posts.php?delete={$post_id}'>Delete</a></td>";
         echo "</tr>";
     }
@@ -116,6 +121,37 @@ if(isset($_GET['delete'])){
     $delete_query = mysqli_query($connection, $query);
     header("Location: posts.php");
 
+}
+if(isset($_GET['resetviews'])){
+    $post_id_reset = $_GET['resetviews'];
+    $query = "UPDATE posts SET post_views = 0 WHERE post_id = {$post_id_reset}";
+    $delete_query = mysqli_query($connection, $query);
+    header("Location: posts.php");
+
+}
+if(isset($_GET['clone'])){
+    $post_id_clone = $_GET['clone'];
+    $query = "SELECT * FROM posts WHERE post_id = $post_id_clone";
+    $select_posts_by_id = mysqli_query($connection, $query);
+    while($row = mysqli_fetch_assoc($select_posts_by_id)){
+        $post_id = $row['post_id'];
+        $post_author = $row['post_author'];
+        $post_date = $row['post_date'];
+        $post_title = $row['post_title'];
+        $post_category = $row['post_category_id'];
+        $post_status = $row['post_status'];
+        $post_image = $row['post_image'];
+        $post_tags = $row['post_tags'];
+        $post_comments = $row['post_comment_count'];
+        $post_content = $row['post_content'];
+    }
+
+    $query = "INSERT INTO posts(post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_status) ";
+    $query .= "VALUES({$post_category}, '{$post_title}', '{$post_author}', now(), '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_status}')";
+    $update_post = mysqli_query($connection, $query);
+    confirmQuery($update_post);
+    echo "Post Cloned Successfully" . "<br>" . "<a href='../post.php?p_id={$post_id}' class='btn btn-primary'>View Post</a>" . "<br>";
+    header("Location: posts.php");
 }
 
 
