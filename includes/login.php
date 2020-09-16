@@ -24,6 +24,9 @@ if(isset($_POST['login'])){
     }
     $password = crypt($password, $db_password);
 if($username === $db_username && $password === $db_password){
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     $_SESSION['username'] = $db_username;
     $_SESSION['firstname'] = $db_firstname;
     $_SESSION['lastname'] = $db_lastname;

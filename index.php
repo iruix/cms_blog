@@ -5,6 +5,7 @@
 
 <!-- navigation -->
 <?php include "includes/navigation.php"; ?>
+    <link href="css/style.css" rel="stylesheet">
 
     <!-- Page Content -->
     <div class="container">
@@ -13,9 +14,34 @@
 
             <!-- Blog Entries Column -->
             <div class="col-md-8">
+                <h1 class="page-header">
+                    CMS BLOG
+
+
 
 <?php
-    $query = "SELECT * FROM posts";
+$per_page = 5; //Posts displayed per page
+    if(isset($_GET['page'])){
+        $page = $_GET['page'];
+
+    } else {
+        $page = "";
+    }
+    echo "<small>Page Number {$page}</small></h1>";
+
+    if($page == "" || $page == 1){
+        $page_1 = 0;
+    } else {
+        $page_1 = ($page * $per_page) - $per_page;
+    }
+
+    $post_count_query = "SELECT * FROM posts";
+    $find_count = mysqli_query($connection, $post_count_query);
+    $count = mysqli_num_rows($find_count);
+
+    $count = ceil($count / $per_page);
+
+    $query = "SELECT * FROM posts LIMIT $page_1, $per_page";
     $select_all_posts_query = mysqli_query($connection, $query);
         while($row = mysqli_fetch_assoc($select_all_posts_query)){
             $post_id = $row['post_id'];
@@ -31,10 +57,7 @@
             
         ?>
 
-            <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1>
+
 
                 <!-- First Blog Post -->
                 <h2>
@@ -48,21 +71,13 @@
                 <a href="post.php?p_id=<?php echo $post_id; ?>">
                 <img class="img-responsive" src="images/<?php echo $post_image; ?>" alt="">
                 </a>
-                <hr>
+                <br>
+                <br>
                 <p><?php echo $post_content; ?></p>
                 <a class="btn btn-primary" href="post.php?p_id=<?php echo $post_id; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
                 <hr>
 
-                <!-- Pager -->
-                <ul class="pager">
-                    <li class="previous">
-                        <a href="#">&larr; Older</a>
-                    </li>
-                    <li class="next">
-                        <a href="#">Newer &rarr;</a>
-                    </li>
-                </ul>
 <?php } } ?>
         
             </div>
@@ -73,6 +88,19 @@
         </div>
         <!-- /.row -->
 
-        <hr>
+    <ul class="pager">
+        <h2><small>Page <?php echo $page; ?></small></h2>
+        <?php
+        for($i = 1; $i <= $count; $i++){
+            if($i == $page){
+                echo "<li><a class='active_link' href='index.php?page={$i}'>{$i}</a></li>";
+            } else {
+                echo "<li><a href='index.php?page={$i}'>{$i}</a></li>";
+            }
+        }
+
+        ?>
+
+    </ul>
 
 <?php include "includes/footer.php"; ?>
