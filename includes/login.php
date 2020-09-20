@@ -22,19 +22,18 @@ if(isset($_POST['login'])){
         $db_role = $row['user_role'];
         $db_username = $row['username'];
     }
-    $password = crypt($password, $db_password);
-if($username === $db_username && $password === $db_password){
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+    if (password_verify($password, $db_password)) {
+        $_SESSION['username'] = $db_username;
+        $_SESSION['firstname'] = $db_firstname;
+        $_SESSION['lastname'] = $db_lastname;
+        $_SESSION['user_role'] = $db_role;
+
+        header("Location: ../admin");
+
+    } else {
+
+        header("Location: ../index.php");
     }
-    $_SESSION['username'] = $db_username;
-    $_SESSION['firstname'] = $db_firstname;
-    $_SESSION['lastname'] = $db_lastname;
-    $_SESSION['user_role'] = $db_role;
-    header("Location: ../admin");
-} else {
-    header("Location: ../index.php");
-}
 
 }
 ?>

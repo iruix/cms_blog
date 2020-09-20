@@ -9,8 +9,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                     <h1 class="page-header">
-                            Admin Page
-                            <small>Author</small>
+                            All Comments
                         </h1>
 <?php
 if(isset($_GET['source'])){

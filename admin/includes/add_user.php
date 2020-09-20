@@ -7,10 +7,10 @@ if(isset($_POST['create_user'])){
     $user_email = mysqli_real_escape_string($connection,$_POST['user_email']);
     $user_password = mysqli_real_escape_string($connection,$_POST['user_password']);
     $user_role = mysqli_real_escape_string($connection,$_POST['user_role']);
-
+    $password = password_hash($user_password, PASSWORD_BCRYPT, array('cost'=> 12));
 
     $query = "INSERT INTO users(user_firstname, user_lastname, username, user_email, user_password, user_role) ";
-    $query .= "VALUES('{$user_firstname}', '{$user_lastname}', '{$username}', '{$user_email}', '{$user_password}', '{$user_role}')";
+    $query .= "VALUES('{$user_firstname}', '{$user_lastname}', '{$username}', '{$user_email}', '{$password}', '{$user_role}')";
     $add_user_query = mysqli_query($connection, $query);
     confirmQuery($add_user_query);
     echo "User Created Successfully" . "<br>" . "<a href='users.php' class='btn btn-primary'>View Users</a>" . "<br>";

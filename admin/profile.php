@@ -12,26 +12,35 @@ if(isset($_SESSION['username'])){
         $user_lastname = $row['user_lastname'];
         $user_email = $row['user_email'];
         $user_image = $row['user_image'];
-        $user_role = $row['user_role'];
     }
 
 }
 
 if(isset($_POST['update_user'])){
-    $user_firstname =$_POST['user_firstname'];
+    $user_firstname = mysqli_real_escape_string($connection, $_POST['user_firstname']);
     // $post_date = date('d-m-y');
-    $user_lastname = $_POST['user_lastname'];
-    $username = $_POST['username'];
-    $user_email = $_POST['user_email'];
-    $user_password = $_POST['user_password'];
-    $user_role = $_POST['user_role'];
+    $user_lastname = mysqli_real_escape_string($connection, $_POST['user_lastname']);
+    $username = mysqli_real_escape_string($connection, $_POST['username']);
+    $user_email = mysqli_real_escape_string($connection, $_POST['user_email']);
+    $user_password = mysqli_real_escape_string($connection, $_POST['user_password']);
 
+    if (!empty($user_password)) {
+        $query_password = "SELECT user_password FROM users WHERE user_id = $the_user_id";
+        $get_user_query = mysqli_query($connection, $query_password);
+        confirmQuery($get_user_query);
 
-    $query = "UPDATE users SET username = '{$username}', user_firstname = '{$user_firstname}', user_lastname = '{$user_lastname}', ";
-    $query .= "user_email = '{$user_email}', user_password = '{$user_password}', user_role = '{$user_role}' WHERE username = '{$username}'";
-    $update_user_query = mysqli_query($connection, $query);
-    confirmQuery($update_user_query);
-    header("Location: users.php");
+        $row = mysqli_fetch_array($get_user_query);
+        $db_user_password = $row['user_password'];
+        if ($db_user_password != $user_password) {
+            $hashed_password = password_hash($user_password, PASSWORD_BCRYPT, array('cost' => 12));
+        }
+        $query = "UPDATE users SET username = '{$username}', user_firstname = '{$user_firstname}', user_lastname = '{$user_lastname}', ";
+        $query .= "user_email = '{$user_email}', user_password = '{$user_password}', user_role = '{$user_role}' WHERE username = '{$username}'";
+        $update_user_query = mysqli_query($connection, $query);
+        confirmQuery($update_user_query);
+        header("Location: users.php");
+    }
+
 }
 
 ?>
@@ -61,19 +70,6 @@ if(isset($_POST['update_user'])){
                             <label for="username">Username</label>
                             <input type="text" class="form-control" name="username" value=<?php echo $username;?>>
                         </div>
-                        <div class="form-group">
-                            <label for="user_role">User Role</label><br>
-                            <select name="user_role"  id="post_role">
-                                <option value=<?php echo $user_role;?>><?php echo $user_role;?></option>
-                                <?php
-                                if($user_role == 'admin'){
-                                    echo "<option value='subscriber'>subscriber</option>";
-                                } else {
-                                    echo "<option value='admin'>admin</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
 
                         <!-- <div class="form-group">
                             <label for="post_image">Post Image</label>
@@ -84,8 +80,8 @@ if(isset($_POST['update_user'])){
                             <input type="email" class="form-control" name="user_email" value=<?php echo $user_email;?>>
                         </div>
                         <div class="form-group">
-                            <label for="user_password">Password</label>
-                            <input type="password" class="form-control" name="user_password" value=<?php echo $user_password;?>>
+                            <label for="user_password">Password<small>(If this field is empty, password will not be changed)</small></label>
+                            <input type="password" class="form-control" name="user_password" autocomplete="off">
                         </div>
 
                         <div class="form-group">
