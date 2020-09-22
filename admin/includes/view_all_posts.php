@@ -1,23 +1,50 @@
 <?php
 if(isset($_POST['checkBoxArray'])){
-    foreach($_POST['checkBoxArray'] as $checkBoxValue){
-        $bulkOptions = $_POST['bulk_options'];
-        switch($bulkOptions){
-            case 'published':
-                $query = "UPDATE posts SET post_status = '{$bulkOptions}' WHERE post_id = {$checkBoxValue}";
-                $publishQuery = mysqli_query($connection, $query);
-                confirmQuery($publishQuery);
-                break;
-            case 'draft':
-                $query = "UPDATE posts SET post_status = '{$bulkOptions}' WHERE post_id = {$checkBoxValue}";
-                $draftQuery = mysqli_query($connection, $query);
-                confirmQuery($draftQuery);
-                break;
-            case 'delete':
-                $query = "DELETE FROM posts WHERE post_id = {$checkBoxValue}";
-                $deleteQuery = mysqli_query($connection, $query);
-                confirmQuery($deleteQuery);
-                break;
+    if (isset($_SESSION['user_role'])) {
+        if ($_SESSION['user_role'] == 'admin') {
+            foreach($_POST['checkBoxArray'] as $checkBoxValue) {
+                $bulkOptions = $_POST['bulk_options'];
+                switch ($bulkOptions) {
+                    case 'published':
+                        $query = "UPDATE posts SET post_status = '{$bulkOptions}' WHERE post_id = {$checkBoxValue}";
+                        $publishQuery = mysqli_query($connection, $query);
+                        confirmQuery($publishQuery);
+                        break;
+                    case 'draft':
+                        $query = "UPDATE posts SET post_status = '{$bulkOptions}' WHERE post_id = {$checkBoxValue}";
+                        $draftQuery = mysqli_query($connection, $query);
+                        confirmQuery($draftQuery);
+                        break;
+                    case 'delete':
+                        $query = "DELETE FROM posts WHERE post_id = {$checkBoxValue}";
+                        $deleteQuery = mysqli_query($connection, $query);
+                        confirmQuery($deleteQuery);
+                        break;
+                    case 'clone':
+                        $query = "SELECT * FROM posts WHERE post_id = {$checkBoxValue}";
+                        $select_posts_by_id = mysqli_query($connection, $query);
+                        while ($row = mysqli_fetch_assoc($select_posts_by_id)) {
+                            $post_id = $row['post_id'];
+                            $post_author = $row['post_author'];
+                            $post_date = $row['post_date'];
+                            $post_title = $row['post_title'];
+                            $post_category = $row['post_category_id'];
+                            $post_status = $row['post_status'];
+                            $post_image = $row['post_image'];
+                            $post_tags = $row['post_tags'];
+                            $post_comments = $row['post_comment_count'];
+                            $post_content = $row['post_content'];
+                        }
+                        $query = "INSERT INTO posts(post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_status) ";
+                        $query .= "VALUES({$post_category}, '{$post_title}', '{$post_author}', now(), '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_status}')";
+                        $update_post = mysqli_query($connection, $query);
+                        confirmQuery($update_post);
+                }
+            }
+        } else {
+            echo '<script language="javascript">';
+            echo 'alert("You have to be Admin to do that")';
+            echo '</script>';
         }
     }
 }
@@ -33,6 +60,7 @@ if(isset($_POST['checkBoxArray'])){
             <option value="published">Publish</option>
             <option value="draft">Draft</option>
             <option value="delete">Delete</option>
+            <option value="clone">Clone</option>
         </select>
     </div>
     <div class="col-xs-4">
@@ -121,42 +149,66 @@ if(isset($_POST['checkBoxArray'])){
 </form>
 <?php
 if(isset($_GET['delete'])){
-    $post_id_delete = $_GET['delete'];
-    $query = "DELETE FROM posts WHERE post_id = {$post_id_delete}";
-    $delete_query = mysqli_query($connection, $query);
-    header("Location: posts.php");
+    if (isset($_SESSION['user_role'])) {
+        if ($_SESSION['user_role'] == 'admin') {
+            $post_id_delete = mysqli_real_escape_string($connection, $_GET['delete']);
+            $query = "DELETE FROM posts WHERE post_id = {$post_id_delete}";
+            $delete_query = mysqli_query($connection, $query);
+            header("Location: posts.php");
+        } else {
+            echo '<script language="javascript">';
+            echo 'alert("You have to be Admin to do that")';
+            echo '</script>';
+        }
+    }
 
 }
 if(isset($_GET['resetviews'])){
-    $post_id_reset = $_GET['resetviews'];
-    $query = "UPDATE posts SET post_views = 0 WHERE post_id = {$post_id_reset}";
-    $delete_query = mysqli_query($connection, $query);
-    header("Location: posts.php");
+    if (isset($_SESSION['user_role'])) {
+        if ($_SESSION['user_role'] == 'admin') {
+            $post_id_reset = mysqli_real_escape_string($connection, $_GET['resetviews']);
+            $query = "UPDATE posts SET post_views = 0 WHERE post_id = {$post_id_reset}";
+            $delete_query = mysqli_query($connection, $query);
+            header("Location: posts.php");
+        } else {
+            echo '<script language="javascript">';
+            echo 'alert("You have to be Admin to do that")';
+            echo '</script>';
+        }
+    }
 
 }
 if(isset($_GET['clone'])){
-    $post_id_clone = $_GET['clone'];
-    $query = "SELECT * FROM posts WHERE post_id = $post_id_clone";
-    $select_posts_by_id = mysqli_query($connection, $query);
-    while($row = mysqli_fetch_assoc($select_posts_by_id)){
-        $post_id = $row['post_id'];
-        $post_author = $row['post_author'];
-        $post_date = $row['post_date'];
-        $post_title = $row['post_title'];
-        $post_category = $row['post_category_id'];
-        $post_status = $row['post_status'];
-        $post_image = $row['post_image'];
-        $post_tags = $row['post_tags'];
-        $post_comments = $row['post_comment_count'];
-        $post_content = $row['post_content'];
-    }
+    if (isset($_SESSION['user_role'])) {
+        if ($_SESSION['user_role'] == 'admin') {
+            $post_id_clone = mysqli_real_escape_string($connection, $_GET['clone']);
+            $query = "SELECT * FROM posts WHERE post_id = $post_id_clone";
+            $select_posts_by_id = mysqli_query($connection, $query);
+            while ($row = mysqli_fetch_assoc($select_posts_by_id)) {
+                $post_id = $row['post_id'];
+                $post_author = $row['post_author'];
+                $post_date = $row['post_date'];
+                $post_title = $row['post_title'];
+                $post_category = $row['post_category_id'];
+                $post_status = $row['post_status'];
+                $post_image = $row['post_image'];
+                $post_tags = $row['post_tags'];
+                $post_comments = $row['post_comment_count'];
+                $post_content = $row['post_content'];
+            }
 
-    $query = "INSERT INTO posts(post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_status) ";
-    $query .= "VALUES({$post_category}, '{$post_title}', '{$post_author}', now(), '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_status}')";
-    $update_post = mysqli_query($connection, $query);
-    confirmQuery($update_post);
-    echo "Post Cloned Successfully" . "<br>" . "<a href='../post.php?p_id={$post_id}' class='btn btn-primary'>View Post</a>" . "<br>";
-    header("Location: posts.php");
+            $query = "INSERT INTO posts(post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_status) ";
+            $query .= "VALUES({$post_category}, '{$post_title}', '{$post_author}', now(), '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_status}')";
+            $update_post = mysqli_query($connection, $query);
+            confirmQuery($update_post);
+            echo "Post Cloned Successfully" . "<br>" . "<a href='../post.php?p_id={$post_id}' class='btn btn-primary'>View Post</a>" . "<br>";
+            header("Location: posts.php");
+        } else {
+            echo '<script language="javascript">';
+            echo 'alert("You have to be Admin to do that")';
+            echo '</script>';
+        }
+    }
 }
 
 

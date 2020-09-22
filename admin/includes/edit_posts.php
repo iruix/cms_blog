@@ -41,7 +41,7 @@ if(isset($_POST['update_post'])){
 
     $update_post = mysqli_query($connection, $query);
     confirmQuery($update_post);
-    echo "Post Edited Successfully" . "<br>" . "<a href='../post.php?p_id={$post_id}' class='btn btn-primary'>View Post</a>" . "<br>";
+    echo "Post Edited Successfully" . "<br>" . "<a href='../post.php?p_id={$post_id}' class='btn btn-success'>View Post</a>" . " " . "<a href='posts.php' class='btn btn-primary'>View All Posts</a>" . "<br>";
 }
 ?>
 
@@ -69,7 +69,18 @@ if(isset($_POST['update_post'])){
     </div>
     <div class="form-group">
         <label for="author">Post Author</label>
-        <input value="<?php echo $post_author; ?>"  type="text" class="form-control" name="post_author">
+        <select name="post_author" id="post_author">
+            <option value="<?php echo $post_author; ?>"><?php echo $post_author; ?></option>
+            <?php
+            $query = "SELECT * FROM users WHERE username != '{$post_author}'";//You can limit it by adding LIMIT 3 to the end
+            $select_users = mysqli_query($connection, $query);
+            confirmQuery($select_users);
+            while($row = mysqli_fetch_assoc($select_users)){
+                $username = $row['username'];
+                echo "<option value='{$username}'>{$username}</option>";
+            }
+            ?>
+        </select>
     </div>
     <div class="form-group">
         <select name="post_status" id="">

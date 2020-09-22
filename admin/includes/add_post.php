@@ -50,15 +50,14 @@ if(isset($_POST['create_post'])){
     <select name="author" id="author">
         <?php
         $currentUser = $_SESSION['username'];
-        $currentUserId = $_SESSION['id'];
-        echo "<option value='$currentUserId'>{$currentUser}</option>";
-        $query = "SELECT * FROM users";
+        echo "<option value='$currentUser'>{$currentUser}</option>";
+        $query = "SELECT * FROM users WHERE username != '{$currentUser}'";
         $select_users = mysqli_query($connection, $query);
         confirmQuery($select_users);
         while($row = mysqli_fetch_assoc($select_users)){
             $user_name = $row['username'];
             $user_id = $row['user_id'];
-            echo "<option value='$user_id'>{$user_name}</option>";
+            echo "<option value='$user_name'>{$user_name}</option>";
         }
 
 

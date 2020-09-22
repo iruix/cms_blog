@@ -45,24 +45,48 @@
     </table>
 <?php
 if(isset($_GET['change_to_admin'])){
-    $user_role_admin = $_GET['change_to_admin'];
-    $query = "UPDATE users SET user_role = 'admin' WHERE user_id = $user_role_admin";
-    $user_admin_query = mysqli_query($connection, $query);
-    header("Location: users.php");
+    if (isset($_SESSION['user_role'])) {
+        if ($_SESSION['user_role'] == 'admin') {
+            $user_role_admin = mysqli_real_escape_string($connection, $_GET['change_to_admin']);
+            $query = "UPDATE users SET user_role = 'admin' WHERE user_id = $user_role_admin";
+            $user_admin_query = mysqli_query($connection, $query);
+            header("Location: users.php");
+        } else {
+            echo '<script language="javascript">';
+            echo 'alert("You have to be Admin to do that")';
+            echo '</script>';
+        }
+    }
 }
 
 if(isset($_GET['change_to_subscriber'])){
-    $user_role_subscriber = $_GET['change_to_subscriber'];
-    $query = "UPDATE users SET user_role = 'subscriber' WHERE user_id = $user_role_subscriber";
-    $user_subscriber_query = mysqli_query($connection, $query);
-    header("Location: users.php");
+    if (isset($_SESSION['user_role'])) {
+        if ($_SESSION['user_role'] == 'admin') {
+            $user_role_subscriber = mysqli_real_escape_string($connection, $_GET['change_to_subscriber']);
+            $query = "UPDATE users SET user_role = 'subscriber' WHERE user_id = $user_role_subscriber";
+            $user_subscriber_query = mysqli_query($connection, $query);
+            header("Location: users.php");
+        } else {
+            echo '<script language="javascript">';
+            echo 'alert("You have to be Admin to do that")';
+            echo '</script>';
+        }
+    }
 }
 
-if(isset($_GET['delete'])){
-    $user_id_delete = $_GET['delete'];
-    $query = "DELETE FROM users WHERE user_id = {$user_id_delete}";
-    $delete_query = mysqli_query($connection, $query);
-    header("Location: users.php");
+if(isset($_GET['delete'])) {
+    if (isset($_SESSION['user_role'])) {
+        if($_SESSION['user_role'] == 'admin'){
+        $user_id_delete = mysqli_real_escape_string($connection, $_GET['delete']);
+        $query = "DELETE FROM users WHERE user_id = {$user_id_delete}";
+        $delete_query = mysqli_query($connection, $query);
+        header("Location: users.php");
+        } else {
+            echo '<script language="javascript">';
+            echo 'alert("You have to be Admin to do that")';
+            echo '</script>';
+        }
+    }
 }
 
 

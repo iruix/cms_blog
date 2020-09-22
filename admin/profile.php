@@ -25,7 +25,7 @@ if(isset($_POST['update_user'])){
     $user_password = mysqli_real_escape_string($connection, $_POST['user_password']);
 
     if (!empty($user_password)) {
-        $query_password = "SELECT user_password FROM users WHERE user_id = $the_user_id";
+        $query_password = "SELECT user_password FROM users WHERE user_id = $user_id";
         $get_user_query = mysqli_query($connection, $query_password);
         confirmQuery($get_user_query);
 
@@ -38,8 +38,9 @@ if(isset($_POST['update_user'])){
         $query .= "user_email = '{$user_email}', user_password = '{$user_password}', user_role = '{$user_role}' WHERE username = '{$username}'";
         $update_user_query = mysqli_query($connection, $query);
         confirmQuery($update_user_query);
-        header("Location: users.php");
     }
+    header("Location: users.php");
+
 
 }
 

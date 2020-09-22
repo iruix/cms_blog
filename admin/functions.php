@@ -1,5 +1,10 @@
 <?php
 
+function escape($str) { //This is for everything that comes and goes to the database
+    global $connection;
+    return mysqli_real_escape_string($connection, trim($str));
+}
+
 function usersOnline(){
     if(isset($_GET['onlineusers'])) {
         global $connection;

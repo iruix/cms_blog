@@ -36,12 +36,12 @@ if(isset($_GET['edit_user'])) {
             if ($db_user_password != $user_password) {
                 $hashed_password = password_hash($user_password, PASSWORD_BCRYPT, array('cost' => 12));
             }
-            $query = "UPDATE users SET username = '{$username}', user_firstname = '{$user_firstname}', user_lastname = '{$user_lastname}', ";
-            $query .= "user_email = '{$user_email}', user_password = '{$hashed_password}', user_role = '{$user_role}' WHERE user_id = {$the_user_id}";
-            $update_user_query = mysqli_query($connection, $query);
-            confirmQuery($update_user_query);
-            header("Location: users.php");
         }
+        $query = "UPDATE users SET username = '{$username}', user_firstname = '{$user_firstname}', user_lastname = '{$user_lastname}', ";
+        $query .= "user_email = '{$user_email}', user_password = '{$hashed_password}', user_role = '{$user_role}' WHERE user_id = {$the_user_id}";
+        $update_user_query = mysqli_query($connection, $query);
+        confirmQuery($update_user_query);
+        header("Location: users.php");
 
     }
 } else {
