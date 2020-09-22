@@ -30,11 +30,6 @@
                             echo "<li><a href='#'>{$cat_title}</a></li>";
 
                         }
-
-                    ?>
-                    <li><a href="admin">Admin</a></li>
-                    <li><a href="registration.php">Register</a></li>
-                    <?php
                     if (session_status() === PHP_SESSION_NONE) session_start();
                         if(isset($_SESSION['user_role'])){
                             $user_role_confirm = $_SESSION['user_role'];
@@ -47,6 +42,11 @@
                         }
 
                     ?>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="contact.php">Contact us</a></li>
+                    <li><a href="registration.php">Register</a></li>
+                    <li><a href="admin">Admin</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
