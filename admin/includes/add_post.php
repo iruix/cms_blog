@@ -46,12 +46,28 @@ if(isset($_POST['create_post'])){
         </select>
     </div>
 <div class="form-group">
-    <label for="author">Post Author</label>
-    <input type="text" class="form-control" name="author">
+    <label for="author">Post Author</label><br>
+    <select name="author" id="author">
+        <?php
+        $currentUser = $_SESSION['username'];
+        $currentUserId = $_SESSION['id'];
+        echo "<option value='$currentUserId'>{$currentUser}</option>";
+        $query = "SELECT * FROM users";
+        $select_users = mysqli_query($connection, $query);
+        confirmQuery($select_users);
+        while($row = mysqli_fetch_assoc($select_users)){
+            $user_name = $row['username'];
+            $user_id = $row['user_id'];
+            echo "<option value='$user_id'>{$user_name}</option>";
+        }
+
+
+        ?>
+    </select>
 </div>
 <div class="form-group">
+    <label for="post_status">Post Status</label><br>
     <select name="post_status" id="post_status">
-        <option disabled value selected>Select Post Status</option>
         <option value="draft">Draft</option>
         <option value="published">Publish</option>
     </select>
