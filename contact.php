@@ -7,7 +7,7 @@
 <?php  include "includes/navigation.php"; ?>
 <?php
 if(isset($_POST['submit'])){
-    $to = '';//insert email you want to send it to
+    $to = '';//todo Use XAMPP to connect to the internet if you want to send emails
     $subject = $_POST['subject'];
     $email = $_POST['email'];
     $body = $_POST['body'];
@@ -25,7 +25,7 @@ if(isset($_POST['submit'])){
                     <div class="form-wrap">
                         <h1>Contact Us</h1>
                         <form role="form" action="registration.php" method="post" id="login-form" autocomplete="off">
-                            <h6 class="text-center"><?php echo $message; ?></h6>
+                            <h6 class="text-center">Email sending is not possible at this moment, because this program was made offline</h6>
                             <div class="form-group">
                                 <label for="email" class="sr-only">Email</label>
                                 <input type="email" name="email" id="email" class="form-control" placeholder="Enter your E-Mail">

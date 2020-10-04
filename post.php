@@ -21,8 +21,16 @@ if(isset($_GET['p_id'])){
     $post_view_query = "UPDATE posts set post_views = post_views + 1 WHERE post_id = $post_id";
     $send_query = mysqli_query($connection, $post_view_query);
 
-    $query = "SELECT * FROM posts WHERE post_id = $post_id";
+    if(isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin'){
+        $query = "SELECT * FROM posts WHERE post_id = $post_id";
+    } else {
+        $query = "SELECT * FROM posts WHERE post_id = $post_id AND post_status = 'published'";
+    }
     $select_all_posts_query = mysqli_query($connection, $query);
+
+    if(mysqli_num_rows($select_all_posts_query) < 1){
+        echo "<h1> No posts currently available </h1>";
+    } else {
         while($row = mysqli_fetch_assoc($select_all_posts_query)){
             $post_title = $row['post_title'];
             $post_author = $row['post_author'];
@@ -61,9 +69,7 @@ if(isset($_GET['p_id'])){
                     </li>
                 </ul>
 <?php }
-} else {
-    header("Location:index.php");
-}
+
 ?>
 
 <!-- Blog Comments -->
@@ -139,7 +145,9 @@ while($row = mysqli_fetch_assoc($select_comment_query)){
                         <?php echo $comment_content; ?>
                     </div>
                 </div>  
-<?php } ?>      
+<?php } } } else {
+    header("Location:index.php");
+} ?>
             </div>
 
             <!-- Blog Sidebar Widgets Column -->

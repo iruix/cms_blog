@@ -25,7 +25,7 @@ $per_page = 5; //Posts displayed per page
         $page = $_GET['page'];
 
     } else {
-        $page = "";
+        $page = 1;
     }
     echo "<small>Page Number {$page}</small></h1>";
 
@@ -34,10 +34,17 @@ $per_page = 5; //Posts displayed per page
     } else {
         $page_1 = ($page * $per_page) - $per_page;
     }
-
-    $post_count_query = "SELECT * FROM posts";
-    $find_count = mysqli_query($connection, $post_count_query);
+    if(isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin'){
+        $query = "SELECT * FROM posts";
+    } else {
+        $query = "SELECT * FROM posts WHERE post_status = 'published'";
+    }
+    $find_count = mysqli_query($connection, $query);
     $count = mysqli_num_rows($find_count);
+
+    if($count < 1){
+        echo "<h1> No posts currently available </h1>";
+    } else {
 
     $count = ceil($count / $per_page);
 
@@ -51,7 +58,6 @@ $per_page = 5; //Posts displayed per page
             $post_image = $row['post_image'];
             $post_content = substr($row['post_content'], 0, 150);
             $post_status = $row['post_status'];
-            if($post_status == 'published'){
 
 
             
@@ -78,7 +84,8 @@ $per_page = 5; //Posts displayed per page
 
                 <hr>
 
-<?php } } ?>
+<?php }  } ?>
+
         
             </div>
 
