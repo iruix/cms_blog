@@ -23,9 +23,11 @@ if(isset($_GET['p_id'])){
             </h1>
 
             <?php
-
-
-            $query = "SELECT * FROM posts WHERE post_author = '{$post_author}'";
+            if(isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin'){
+                $query = "SELECT * FROM posts WHERE post_author = '{$post_author}'";
+            } else {
+                $query = "SELECT * FROM posts WHERE post_author = '{$post_author}' AND post_status = 'published'";
+            }
             $select_all_posts_query = mysqli_query($connection, $query);
             while($row = mysqli_fetch_assoc($select_all_posts_query)){
                 $post_id = $row['post_id'];
