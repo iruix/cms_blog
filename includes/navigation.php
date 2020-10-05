@@ -27,7 +27,18 @@
                         $select_all_categories_query = mysqli_query($connection, $query);
                         while($row = mysqli_fetch_assoc($select_all_categories_query)){
                             $cat_title = $row['cat_title'];
-                            echo "<li><a href='#'>{$cat_title}</a></li>";
+                            $cat_id = $row['cat_id'];
+                            $category_class = '';
+                            $registration_class = '';
+                            $registration = "registration.php";
+                            $pageName = basename($_SERVER['PHP_SELF']);
+
+                            if(isset($_GET['category']) && $_GET['category'] == $cat_id){
+                                $category_class = 'active';
+                            } elseif($pageName == $registration){
+                                $registration_class = 'active';
+                            }
+                            echo "<li class = '$category_class'><a href='category.php?category={$cat_id}'>{$cat_title}</a></li>";
 
                         }
                     if (session_status() === PHP_SESSION_NONE) session_start();
@@ -45,7 +56,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="contact.php">Contact us</a></li>
-                    <li><a href="registration.php">Register</a></li>
+                    <li class="<?php echo $registration_class; ?>"><a href="registration.php">Register</a></li>
                     <li><a href="admin">Admin</a></li>
                 </ul>
             </div>

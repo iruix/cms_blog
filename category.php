@@ -37,11 +37,6 @@ if(isset($_GET['category'])){
             $post_content = substr($row['post_content'], 0, 150);
         ?>
 
-            <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1>
-
                 <!-- First Blog Post -->
                 <h2>
                     <a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
