@@ -86,4 +86,24 @@ function deleteCategory(){
     }
 }
 
+/*********** Counts stuff in admin index ************/
+
+function recordCount($table){
+    global $connection;
+    $query = "SELECT * FROM " . $table;
+    $select_all_posts = mysqli_query($connection, $query);
+    $result = mysqli_num_rows($select_all_posts);
+
+    return $result;
+}
+
+function checkStatus($tableName, $columnName, $status){
+    global $connection;
+    $query = "SELECT * FROM $tableName WHERE $columnName = '$status'";
+    $result = mysqli_query($connection, $query);
+    return mysqli_num_rows($result);
+
+
+}
+
 ?>
