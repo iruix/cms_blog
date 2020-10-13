@@ -6,33 +6,8 @@
     
     <?php  include "includes/navigation.php"; ?>
 <?php
-if(isset($_POST['submit'])){
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+if(isset($_POST['submit'])) {
 
-    if(!empty($username) && !empty($email) && !empty($email)){
-        $username = mysqli_real_escape_string($connection, $username);
-        $email = mysqli_real_escape_string($connection, $email);
-        $password = mysqli_real_escape_string($connection, $password);
-
-        $password = password_hash($password, PASSWORD_BCRYPT, array('cost'=> 12));
-
-        $query = "INSERT INTO users (username, user_email, user_password, user_role) VALUES ('{$username}', '{$email}', '{$password}', 'subscriber')";
-        $register_user_query = mysqli_query($connection, $query);
-        if(!$register_user_query){
-            die("Query Failed: " . mysqli_error($connection) . ' ' . mysqli_errno($connection));
-        }
-        $message = "Your registration was successful!";
-    } else {
-        $message = "Fields can not be empty!";
-    }
-
-
-
-} else {
-    $message = '';
-}
 
 ?>
  

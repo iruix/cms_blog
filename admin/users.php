@@ -1,4 +1,9 @@
 <?php include "includes/admin_header.php"; ?>
+
+<?php if(!isAdmin($_SESSION['username'])){
+    header("Location: index.php");
+}
+    ?>
     <div id="wrapper">
         <?php include "includes/admin_navigation.php"; ?>
         <div id="page-wrapper">
