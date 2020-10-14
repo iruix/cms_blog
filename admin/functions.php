@@ -151,27 +151,51 @@ function redirect($location){
 
 function register($username, $email, $password){
     global $connection;
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $username = mysqli_real_escape_string($connection, $username);
+    $email = mysqli_real_escape_string($connection, $email);
+    $password = mysqli_real_escape_string($connection, $password);
 
-    if (usernameExists($username)) {
-        $message = "Username Already Exists";
+    $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
+
+    $query = "INSERT INTO users (username, user_email, user_password, user_role) VALUES ('{$username}', '{$email}', '{$password}', 'subscriber')";
+    $register_user_query = mysqli_query($connection, $query);
+    confirmQuery($register_user_query);
+}
+
+function login($username, $password){
+    global $connection;
+    $username = trim($username);
+    $password = trim($password);
+
+    $username = mysqli_real_escape_string($connection, $username);
+    $password = mysqli_real_escape_string($connection, $password);
+
+    $query = "SELECT * FROM users WHERE username = '{$username}'";
+    $select_user_query = mysqli_query($connection, $query);
+    if(!$select_user_query){
+        die("QUERY FAILED: " . mysqli_error($connection));
+    }
+    while ($row = mysqli_fetch_array($select_user_query)){
+        $db_firstname = $row['user_firstname'];
+        $db_lastname = $row['user_lastname'];
+        $db_password = $row['user_password'];
+        $db_role = $row['user_role'];
+        $db_username = $row['username'];
+    }
+    if (password_verify($password, $db_password)) {
+        $_SESSION['username'] = $db_username;
+        $_SESSION['firstname'] = $db_firstname;
+        $_SESSION['lastname'] = $db_lastname;
+        $_SESSION['user_role'] = $db_role;
+
+        redirect("/cms/admin");
+
     } else {
 
-        if (!empty($username) && !empty($email) && !empty($email)) {
-            $username = mysqli_real_escape_string($connection, $username);
-            $email = mysqli_real_escape_string($connection, $email);
-            $password = mysqli_real_escape_string($connection, $password);
-
-            $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
-
-            $query = "INSERT INTO users (username, user_email, user_password, user_role) VALUES ('{$username}', '{$email}', '{$password}', 'subscriber')";
-            $register_user_query = mysqli_query($connection, $query);
-            confirmQuery($register_user_query);
-            $message = "Your registration was successful!";
-        }
+        redirect("/cms");
     }
+
 }
+
 
 ?>

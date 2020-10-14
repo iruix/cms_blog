@@ -1,6 +1,10 @@
 <div class="col-md-4">
+    <div class="well">
+    <?php if(isset($_SESSION['user_role'])): ?>
+    <h4>Logged in as <?php echo $_SESSION['username'];?></h4>
+        <a class="btn btn-primary" href="includes/logout.php">Log Out</a>
+    <?php else: ?>
 
-                <div class="well">
                     <h4>Login</h4>
                     <form action="includes/login.php" method="post">
                         <div class="form-group">
@@ -13,7 +17,7 @@
                                             </span>
                         </div>
                     </form> <!-- search form -->
-                    <!-- /.input-group -->
+    <?php endif; ?>
                 </div>
 
                 <!-- Blog Search Well -->
