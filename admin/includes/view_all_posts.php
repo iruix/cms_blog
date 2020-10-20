@@ -138,10 +138,18 @@ if(isset($_POST['checkBoxArray'])){
 
         echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to reset post views?'); \" href='posts.php?resetviews={$post_id}'>{$post_views}</a></td>";
         echo "<td><a href='../post.php?p_id={$post_id}'>View Post</a></td>";
-        echo "<td><a href='posts.php?source=edit_posts&p_id={$post_id}'>Edit</a></td>";
+        echo "<td><a class='btn btn-info' href='posts.php?source=edit_posts&p_id={$post_id}'>Edit</a></td>";
 //        echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to clone?'); \" href='posts.php?clone={$post_id}'>Clone</a></td>";
         echo "<td><a rel='$post_id' href='javascript:void(0)' class='clone_link'>Clone</a></td>";
-        echo "<td><a rel='$post_id' href='javascript:void(0)' class='delete_link'>Delete</a></td>";
+        ?>
+        <form action="" method="post">
+            <input type="hidden" name="post_id" value="<?php echo $post_id?>">
+            <?php
+            echo '<td><input class="btn btn-danger" type="submit" name="delete" value="Delete"></td>';
+?>
+        </form>
+<?php
+        
 //        echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to delete?'); \" href='posts.php?delete={$post_id}'>Delete</a></td>";
         echo "</tr>";
     }
@@ -151,10 +159,10 @@ if(isset($_POST['checkBoxArray'])){
     </table>
 </form>
 <?php
-if(isset($_GET['delete'])){
+if(isset($_POST['delete'])){
     if (isset($_SESSION['user_role'])) {
         if ($_SESSION['user_role'] == 'admin') {
-            $post_id_delete = mysqli_real_escape_string($connection, $_GET['delete']);
+            $post_id_delete = $_POST['post_id'];
             $query = "DELETE FROM posts WHERE post_id = {$post_id_delete}";
             $delete_query = mysqli_query($connection, $query);
             header("Location: posts.php");
